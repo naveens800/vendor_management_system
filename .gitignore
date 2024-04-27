@@ -1,0 +1,24 @@
+# IDE and OS specific files
+*.pyc
+__pycache__/
+.idea/
+.vscode/
+
+# Database files
+db.sqlite3
+
+# Virtual environment
+.env
+venv/
+env/
+*env
+
+# Local documentation
+docs/
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Static files 
+staticfiles/
