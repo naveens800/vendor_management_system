@@ -28,4 +28,4 @@ class VendorViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def get_queryset(self):
-        return super().get_queryset()
+        return Vendor.objects.all()
