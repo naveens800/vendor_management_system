@@ -47,5 +47,5 @@ Follow these steps to install and set up the Vendor Management System:
     python manage.py runserver
 
 
-## Refer [DOCS.md](.DOCS.md) for API Documentation
+## Refer [DOCS.md](./DOCS.md) for API Documentation
   ### Use any api testing tool like postman/insomnia to run apis
