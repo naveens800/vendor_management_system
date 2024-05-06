@@ -39,9 +39,9 @@ Follow these steps to install and set up the Vendor Management System:
    ```bash
    python manage.py test #python manage.py test --parallel
       
-9. Load sample data to populate the application with predefined information.
+9. Load sample data to populate the application with predefined information which lets you run and test the APIs immediately.
     ```bash
-    python manage.py load_data sample_data.json
+    python manage.py loaddata sample_data.json
 11. Finally, start the Django development server to begin using the application.
     ```bash
     python manage.py runserver
