@@ -8,7 +8,17 @@ from .serializers import PurchaseOrderSerializer
 
 
 class PurchaseOrderViewSet(viewsets.ModelViewSet):
+    """
+    API Endpoints:
+    ● POST /api/purchase_orders/: Create a purchase order.
+    ● GET /api/purchase_orders/: List all purchase orders with an option to filter by vendor.
+    ● GET /api/purchase_orders/{po_id}/: Retrieve details of a specific purchase order.
+    ● PUT /api/purchase_orders/{po_id}/: Update a purchase order.
+    ● DELETE /api/purchase_orders/{po_id}/: Delete a purchase order.
+    """
+
     serializer_class = PurchaseOrderSerializer
+    lookup_url_kwarg = "po_id"
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

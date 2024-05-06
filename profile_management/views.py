@@ -5,7 +5,16 @@ from .models import Vendor
 from .serializers import VendorSerializer
 
 class VendorViewSet(viewsets.ModelViewSet):
+    """
+    API Endpoints:
+    ● POST /api/vendors/: Create a new vendor.
+    ● GET /api/vendors/: List all vendors.
+    ● GET /api/vendors/{vendor_id}/: Retrieve a specific vendor's details.
+    ● PUT /api/vendors/{vendor_id}/: Update a vendor's details.
+    ● DELETE /api/vendors/{vendor_id}/: Delete a vendor
+    """
     serializer_class = VendorSerializer
+    lookup_url_kwarg = 'vendor_id'
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

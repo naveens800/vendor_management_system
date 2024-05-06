@@ -6,6 +6,14 @@ router = DefaultRouter()
 router.register(r'purchase_orders', views.PurchaseOrderViewSet, basename='purchaseorder')
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('purchase_orders/<str:po_id>/acknowledge', views.acknowledge_purchase_order, name='acknowledge_purchase_order'),
+    path(
+        "purchase_orders/<int:po_id>/",
+        views.PurchaseOrderViewSet.as_view(
+            {"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
+        name="vendor-detail",
+    ),
+    path('purchase_orders/<int:po_id>/acknowledge', views.acknowledge_purchase_order, name='acknowledge_purchase_order'),
 ]
+
+urlpatterns += router.urls

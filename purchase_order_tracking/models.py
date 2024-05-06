@@ -22,6 +22,13 @@ class PurchaseOrder(models.Model):
     acknowledgment_date = models.DateTimeField(null=True)
 
     objects = PurchaseOrderManager()
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["quality_rating"]),
+            models.Index(fields=["acknowledgment_date"])
+        ]
 
     def clean(self):
         if self.delivery_date < self.order_date:

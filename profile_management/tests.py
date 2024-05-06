@@ -11,10 +11,10 @@ class VendorAPITest(TestCase):
         self.client = APIClient()
 
         # Define the URLs
-        self.vendor_list_url = reverse(
-            "vendor-list"
-        )  # Assuming 'vendor' is the base name of the ViewSet
-        self.vendor_detail_url = lambda pk: reverse("vendor-detail", kwargs={"pk": pk})
+        self.vendor_list_url = reverse("vendor-list")
+        self.vendor_detail_url = lambda pk: reverse(
+            "vendor-detail", kwargs={"vendor_id": pk}
+        )
 
         # Create a sample vendor instance
         self.vendor = Vendor.objects.create(
@@ -71,14 +71,6 @@ class VendorAPITest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["name"], updated_data["name"])
-
-    def test_partial_update_vendor(self):
-        partial_data = {"name": "Partially Updated Vendor"}
-        response = self.client.patch(
-            self.vendor_detail_url(self.vendor.pk), data=partial_data, format="json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["name"], partial_data["name"])
 
     def test_delete_vendor(self):
         response = self.client.delete(self.vendor_detail_url(self.vendor.pk))

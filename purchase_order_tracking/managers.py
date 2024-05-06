@@ -9,7 +9,16 @@ def timedelta_to_hours(td):
 
 
 class PurchaseOrderManager(models.Manager):
-    def update_on_time_delivery_rate(self, instance):
+    """
+    Manager class for handling business logic and calculations related to Purchase Orders.
+
+    This class contains methods that are responsible for:
+    - Updating the on-time delivery rate, quality rating average, average response time, and fulfillment rate
+      for vendors based on the status of their purchase orders.
+    - Calculating the various performance metrics to keep the vendor's performance records updated.
+    """
+
+    def update_appropriate_metrics(self, instance):
         on_time_delivery_rate = self.calculate_on_time_delivery_rate(instance)
         quality_rating_avg = self.calculate_quality_rating_avg(instance)
         avg_response_time = self.calculate_average_response_time(instance)
@@ -25,15 +34,21 @@ class PurchaseOrderManager(models.Manager):
 
     def calculate_on_time_delivery_rate(self, instance):
         if instance.status == self.model.Status.COMPLETED:
-            completed_purchases = self.filter(
-                vendor=instance.vendor,
-                status=self.model.Status.COMPLETED,
-                delivery_date__lte=F("delivery_date"),
-            ).count()
+            completed_purchases = (
+                self.select_related("vendor")
+                .filter(
+                    vendor=instance.vendor,
+                    status=self.model.Status.COMPLETED,
+                    delivery_date__lte=F("delivery_date"),
+                )
+                .count()
+            )
 
-            total_completed_purchases = self.filter(
-                vendor=instance.vendor, status=self.model.Status.COMPLETED
-            ).count()
+            total_completed_purchases = (
+                self.select_related("vendor")
+                .filter(vendor=instance.vendor, status=self.model.Status.COMPLETED)
+                .count()
+            )
 
             return (
                 (completed_purchases / total_completed_purchases) * 100
@@ -43,16 +58,21 @@ class PurchaseOrderManager(models.Manager):
 
     def calculate_quality_rating_avg(self, instance):
         if instance.status == self.model.Status.COMPLETED and instance.quality_rating:
-            return self.filter(
-                quality_rating__isnull=False,
-                vendor=instance.vendor,
-                status=self.model.Status.COMPLETED,
-            ).aggregate(Avg("quality_rating", default=None))["quality_rating__avg"]
+            return (
+                self.select_related("vendor")
+                .filter(
+                    quality_rating__isnull=False,
+                    vendor=instance.vendor,
+                    status=self.model.Status.COMPLETED,
+                )
+                .aggregate(Avg("quality_rating", default=None))["quality_rating__avg"]
+            )
 
     def calculate_average_response_time(self, instance):
         if instance.acknowledgment_date:
             response_time_avg = (
-                self.filter(vendor=instance.vendor, acknowledgment_date__isnull=False)
+                self.select_related("vendor")
+                .filter(vendor=instance.vendor, acknowledgment_date__isnull=False)
                 .annotate(
                     response_time=ExpressionWrapper(
                         F("acknowledgment_date") - F("issue_date"),
