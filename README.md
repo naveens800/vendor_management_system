@@ -48,4 +48,4 @@ Follow these steps to install and set up the Vendor Management System:
 
 
 ## Refer [DOCS.md](./DOCS.md) for API Documentation
-  ### Use any api testing tool like postman/insomnia to run apis
+  ### Use any API testing tool like Postman/Insomnia to run APIs
